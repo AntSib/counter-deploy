@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -25,7 +25,11 @@ jobs:
 
       - name: Sync repository to server
         run: |
-          rsync -av --delete --exclude='.git' --exclude='node_modules' ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            ./ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
         env:
           RSYNC_RSH: "ssh -o StrictHostKeyChecking=yes"
 

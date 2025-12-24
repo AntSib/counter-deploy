@@ -1,32 +1,35 @@
 # Stage 1: build frontend
-FROM node:18 as nodebuild
+FROM node:20-alpine AS nodebuild
 WORKDIR /app
-# copy frontend sources
-COPY frontend/package.json /app/package.json
-COPY frontend/package-lock.json /app/package-lock.json
-COPY frontend/vite.config.js /app/vite.config.js
-COPY frontend/index.html /app/index.html
-COPY frontend/src /app/src
+
+COPY frontend/package.json frontend/package-lock.json ./
+COPY frontend/index.html ./
+COPY frontend/vite.config.ts ./
+COPY frontend/tsconfig.json ./
+COPY frontend/src ./src
+
 RUN npm ci
 RUN npm run build
 
-# Stage 2: python runtime
-FROM python:3.11-slim
+
+# Stage 2: build backend
+FROM python:3.12-slim
 WORKDIR /app
 
-# system deps (if necessary)
-RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential \
+ && rm -rf /var/lib/apt/lists/*
 
-# copy backend code
-COPY ./backend /app
-
-# copy built frontend into static folder
-COPY --from=nodebuild /app/dist /app/static
-
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY backend .
+
+COPY --from=nodebuild /app/dist ./static
 
 ENV FLASK_ENV=production
 ENV PORT=8000
 
 EXPOSE 8000
+
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app", "--workers", "2"]
