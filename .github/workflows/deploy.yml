@@ -29,12 +29,10 @@ jobs:
             --exclude='node_modules' \
             ./ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
-        env:
-          RSYNC_RSH: "ssh -o StrictHostKeyChecking=yes"
 
       - name: Run docker-compose on server
         run: |
-          ssh -o StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
             cd ${{ secrets.DEPLOY_PATH }} &&
             docker-compose pull --ignore-pull-failures || true &&
             docker-compose up -d --build
