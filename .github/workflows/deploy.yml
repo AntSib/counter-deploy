@@ -28,7 +28,7 @@ jobs:
             --exclude='.git' \
             --exclude='node_modules' \
             ./ \
-            ssh -p 22 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
 
       - name: Run docker-compose on server
         run: |
