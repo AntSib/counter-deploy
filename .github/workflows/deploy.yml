@@ -31,11 +31,12 @@ jobs:
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
         env:
           SSH_PORT: ${{ secrets.SSH_PORT }}
+        # play-with-docker only
 
 
       - name: Run docker-compose on server
         run: |
-          ssh -o StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "
             cd ${{ secrets.DEPLOY_PATH }} &&
             docker-compose pull --ignore-pull-failures || true &&
             docker-compose up -d --build
