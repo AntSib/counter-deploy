@@ -28,7 +28,7 @@ jobs:
             --exclude='.git' \
             --exclude='node_modules' \
             ./ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
         env:
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
