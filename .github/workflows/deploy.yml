@@ -29,7 +29,9 @@ jobs:
             --exclude='node_modules' \
             ./ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
-        env: RSYNC_RSH: "ssh -o StrictHostKeyChecking=yes"
+        env:
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+
 
       - name: Run docker-compose on server
         run: |
