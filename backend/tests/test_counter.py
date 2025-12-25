@@ -32,4 +32,4 @@ def test_double_increment(client):
 
 def test_any_route(client):
     response = client.get("/api/counter/blah-blah-blah")
-    assert response.status_code == 200
+    assert response.status_code == 404
