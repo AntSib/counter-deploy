@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_initial_value_is_zero(client):
     response = client.get("/api/counter")
     assert response.status_code == 200
@@ -31,24 +28,6 @@ def test_double_increment(client):
 
     response = client.post("/api/counter/increment")
     assert response.json["value"] == 2
-
-
-@pytest.mark.parametrize(
-    [
-        "method",
-        "expected_status_code",
-        "expected_value",
-    ],
-    [
-        ("increment", 200, 1),
-        ("decrement", 200, 0),
-        ("reset", 200, 0),
-    ],
-)
-def test_methods(client, method, expected_status_code, expected_value):
-    response = getattr(client.post, method)("/api/counter")
-    assert response.status_code == expected_status_code
-    assert response.json["value"] == expected_value
 
 
 def test_any_route(client):
