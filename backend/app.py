@@ -62,6 +62,8 @@ def increment():
 
 @app.post("/api/counter/decrement")
 def decrement():
+    if int(r.get(COUNTER_KEY)) == 0:
+        return jsonify({"error": "Cannot decrement below zero"}), 400
     try:
         return jsonify({"value": r.decr(COUNTER_KEY)})
     except Exception:
