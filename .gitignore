@@ -1,7 +1,7 @@
+.venv
+backend/.env
 backend/.env.example
 frontend/node_modules
-.DS_Store
-.venv
 frontend/.DS_Store
 frontend/dist
 secrets.txt
